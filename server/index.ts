@@ -1,17 +1,19 @@
 import { serveStatic } from "@hono/node-server/serve-static";
 import { serve } from "@hono/node-server";
 import { factory } from "./factory.ts";
+import { route as exampleRoute } from "./routes/example.ts";
 
 const app = factory.createApp();
-
-export const apiRoutes = app
-  .basePath('/api')
-
-export type ApiRoutes = typeof apiRoutes;
 
 app.get('/healthz', (c) => {
   return c.json({ message: 'Ok' });
 });
+
+export const apiRoutes = app
+  .basePath('/api')
+  .route('/example', exampleRoute)
+
+export type ApiRoutes = typeof apiRoutes;
 
 app
   .get('/*', serveStatic({ root: './dist/static' }))
